@@ -101,10 +101,12 @@ namespace MediaDevices.Internal
         public static Item GetFromPersistentUniqueId(MediaDevice device, string persistentUniqueId)
         {
             // fill collection with id to request
-            var propVariantPUID = PropVariant.StringToPropVariant(persistentUniqueId);
             var collection = (IPortableDevicePropVariantCollection)new PortableDevicePropVariantCollection();
-            collection.Add(ref propVariantPUID);
 
+            using (var propVariantPUID = PropVariant.StringToPropVariant(persistentUniqueId))
+            {
+                collection.Add(ref propVariantPUID.Value);
+            }
             // request id collection           
             device.deviceContent.GetObjectIDsFromPersistentUniqueIDs(collection, out IPortableDevicePropVariantCollection results);
             string mediaObjectId = results.ToStrings().FirstOrDefault();
@@ -214,72 +216,74 @@ namespace MediaDevices.Internal
             for (uint i = 0; i < num; i++)
             {
                 PropertyKey key = new PropertyKey();
-                PROPVARIANT val = new PROPVARIANT();
-                values.GetAt(i, ref key, ref val);
-
-                if (key.fmtid == WPD.OBJECT_PROPERTIES_V1)
+                using (PropVariant val = new PropVariant())
                 {
-                    switch ((ObjectProperties)key.pid)
+                    values.GetAt(i, ref key, ref val.Value);
+
+                    if (key.fmtid == WPD.OBJECT_PROPERTIES_V1)
                     {
-                    case ObjectProperties.ContentType:
-                        this.ContentType = PropVariant.FromValue(val);
-                        break;
+                        switch ((ObjectProperties)key.pid)
+                        {
+                            case ObjectProperties.ContentType:
+                                this.ContentType = val;
+                                break;
 
-                    case ObjectProperties.Name:
-                        this.name = PropVariant.FromValue(val);
-                        break;
+                            case ObjectProperties.Name:
+                                this.name = val;
+                                break;
 
-                    case ObjectProperties.OriginalFileName:
-                        this.OriginalFileName = PropVariant.FromValue(val);
-                        break;
+                            case ObjectProperties.OriginalFileName:
+                                this.OriginalFileName = val;
+                                break;
 
-                    case ObjectProperties.HintLocationDisplayName:
-                        this.HintLocationName = PropVariant.FromValue(val);
-                        break;
+                            case ObjectProperties.HintLocationDisplayName:
+                                this.HintLocationName = val;
+                                break;
 
-                    case ObjectProperties.ContainerFunctionalObjectId:
-                        this.ParentContainerId = PropVariant.FromValue(val);
-                        break;
+                            case ObjectProperties.ContainerFunctionalObjectId:
+                                this.ParentContainerId = val;
+                                break;
 
-                    case ObjectProperties.Size:
-                        this.Size = PropVariant.FromValue(val);
-                        break;
+                            case ObjectProperties.Size:
+                                this.Size = val;
+                                break;
 
-                    case ObjectProperties.DateCreated:
-                        this.DateCreated = PropVariant.FromValue(val);
-                        break;
+                            case ObjectProperties.DateCreated:
+                                this.DateCreated = val;
+                                break;
 
-                    case ObjectProperties.DateModified:
-                        this.DateModified = PropVariant.FromValue(val);
-                        break;
+                            case ObjectProperties.DateModified:
+                                this.DateModified = val;
+                                break;
 
-                    case ObjectProperties.DateAuthored:
-                        this.DateAuthored = PropVariant.FromValue(val);
-                        break;
+                            case ObjectProperties.DateAuthored:
+                                this.DateAuthored = val;
+                                break;
 
-                    case ObjectProperties.CanDelete:
-                        this.CanDelete = PropVariant.FromValue(val);
-                        break;
+                            case ObjectProperties.CanDelete:
+                                this.CanDelete = val;
+                                break;
 
-                    case ObjectProperties.IsSystem:
-                        this.IsSystem = PropVariant.FromValue(val);
-                        break;
+                            case ObjectProperties.IsSystem:
+                                this.IsSystem = val.ToBool();
+                                break;
 
-                    case ObjectProperties.IsHidden:
-                        this.IsHidden = PropVariant.FromValue(val);
-                        break;
+                            case ObjectProperties.IsHidden:
+                                this.IsHidden = val;
+                                break;
 
-                    case ObjectProperties.IsDrmProtected:
-                        this.IsDRMProtected = PropVariant.FromValue(val);
-                        break;
+                            case ObjectProperties.IsDrmProtected:
+                                this.IsDRMProtected = val;
+                                break;
 
-                    case ObjectProperties.ParentId:
-                        this.ParentId = PropVariant.FromValue(val);
-                        break;
+                            case ObjectProperties.ParentId:
+                                this.ParentId = val;
+                                break;
 
-                    case ObjectProperties.PersistentUniqueId:
-                        this.PersistentUniqueId = PropVariant.FromValue(val);
-                        break;
+                            case ObjectProperties.PersistentUniqueId:
+                                this.PersistentUniqueId = val;
+                                break;
+                        }
                     }
                 }
             }
@@ -532,7 +536,7 @@ namespace MediaDevices.Internal
             var objectIdCollection = (IPortableDevicePropVariantCollection)new PortableDeviceTypesLib.PortableDevicePropVariantCollection();
 
             var propVariantValue = PropVariant.StringToPropVariant(this.Id);
-            objectIdCollection.Add(ref propVariantValue);
+            objectIdCollection.Add(ref propVariantValue.Value);
 
             IPortableDevicePropVariantCollection results = (PortableDeviceApiLib.IPortableDevicePropVariantCollection) new PortableDevicePropVariantCollection();
             // TODO: get the results back and handle failures correctly

@@ -57,7 +57,7 @@ namespace MediaDevices.Internal
             foreach (var value in values)
             {
                 var var = PropVariant.IntToPropVariant(value);
-                col.Add(ref var);
+                col.Add(ref var.Value);
             }
             this.values.SetIPortableDevicePropVariantCollectionValue(key, col);
         }
@@ -104,9 +104,9 @@ namespace MediaDevices.Internal
             col.GetCount(ref count);
             for (uint i = 0; i < count; i++)
             {
-                PROPVARIANT val = new PROPVARIANT();
-                col.GetAt(i, ref val);
-                yield return PropVariant.FromValue(val);
+                PropVariant val = new PropVariant();
+                col.GetAt(i, ref val.Value);
+                yield return val;
             }
         }
 

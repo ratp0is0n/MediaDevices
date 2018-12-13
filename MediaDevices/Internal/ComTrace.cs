@@ -67,21 +67,21 @@ namespace MediaDevices.Internal
             for (uint i = 0; i < num; i++)
             {
                 PropertyKey key = new PropertyKey();
-                PROPVARIANT val = new PROPVARIANT();
-                values.GetAt(i, ref key, ref val);
+                PropVariant val = new PropVariant();
+                values.GetAt(i, ref key, ref val.Value);
 
                 FieldInfo field = FindPropertyKeyField(key);
-                PropVariant vari = (PropVariant)val;
+                
 
                 string fieldName = field?.Name ?? $"{key.fmtid}, {key.pid}";
 
-                switch ((VarType)vari.variantType)
+                switch (val.VariantType)
                 {
                 case VarType.VT_CLSID:
-                    Trace.WriteLine($"##### {fieldName} = {FindGuidField(vari.ToGuid())?.Name ?? vari.ToString()}");
+                    Trace.WriteLine($"##### {fieldName} = {FindGuidField(val.ToGuid())?.Name ?? val.ToString()}");
                     break;
                 default:
-                    Trace.WriteLine($"##### {fieldName} = {vari.ToString()}");
+                    Trace.WriteLine($"##### {fieldName} = {val.ToString()}");
                     break;
                 }
             }
@@ -95,10 +95,12 @@ namespace MediaDevices.Internal
             collection.GetCount(ref num);
             for (uint index = 0; index < num; index++)
             {
-                PROPVARIANT val = new PROPVARIANT();
-                collection.GetAt(index, ref val);
+                using (PropVariant val = new PropVariant())
+                {
+                    collection.GetAt(index, ref val.Value);
 
-                Trace.WriteLine($"##### {((PropVariant)val).ToString()}");
+                    Trace.WriteLine($"##### {val.ToString()}");
+                }
             }
         }
 

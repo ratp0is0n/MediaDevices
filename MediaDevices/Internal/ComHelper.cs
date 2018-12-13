@@ -15,21 +15,15 @@ namespace MediaDevices.Internal
             for (uint i = 0; i < num; i++)
             {
                 PropertyKey key = new PropertyKey();
-                PROPVARIANT val = new PROPVARIANT();
-                try
+                using (PropVariant val = new PropVariant())
                 {
-                    values.GetAt(i, ref key, ref val);
+                    values.GetAt(i, ref key, ref val.Value);
                     if (key.fmtid == findKey.fmtid && key.pid == findKey.pid)
                     {
-                        PropVariant pval = val;
-                        return pval.variantType != VarType.VT_ERROR;
+                        
+                        return val.VariantType != VarType.VT_ERROR;
                     }
                 }
-                finally
-                {
-                    NativeMethods.PropVariantClear(ref val);
-                }
-
             }
             
             return false;
@@ -42,21 +36,23 @@ namespace MediaDevices.Internal
 
         public static VarType GetVarType(this IPortableDeviceValues values, PropertyKey key)
         {
-            PROPVARIANT val;
-            values.GetValue(key, out val);
-            return ((PropVariant)val).variantType;
+            using (PropVariant val = new PropVariant())
+            {
+                values.GetValue(key, out val.Value);
+                return val.VariantType;
+            }
         }
 
         internal static bool TryGetValue(this IPortableDeviceValues values, PropertyKey key, out PropVariant value)
         {
             if (values.HasKeyValue(key))
             {
-                PROPVARIANT val;
-                values.GetValue(key, out val);
-                value = (PropVariant)val;
+                PropVariant val = new PropVariant();
+                values.GetValue(key, out val.Value);
+                value = val;
                 return true;
             }
-            value = new PropVariant();
+            value = null;
             return false;
         }
 
@@ -64,9 +60,11 @@ namespace MediaDevices.Internal
         {
             if (values.HasKeyValue(key))
             {
-                PROPVARIANT val;
-                values.GetValue(key, out val);
-                value = ((PropVariant)val).ToDate(); 
+                using (PropVariant val = new PropVariant())
+                {
+                    values.GetValue(key, out val.Value);
+                    value = val.ToDate();
+                }
                 return true;
             }
             value = null;
@@ -156,9 +154,11 @@ namespace MediaDevices.Internal
         {
             if (values.HasKeyValue(key))
             {
-                PROPVARIANT val;
-                values.GetValue(key, out val);
-                value = ((PropVariant)val).ToByteArray();
+                using (PropVariant val = new PropVariant())
+                {
+                    values.GetValue(key, out val.Value);
+                    value = val.ToByteArray();
+                }
                 return true;
             }
             value = null;

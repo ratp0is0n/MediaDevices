@@ -8,10 +8,118 @@ using TPROPVARIANT = PortableDeviceTypesLib.tag_inner_PROPVARIANT;
 
 namespace MediaDevices.Internal
 {
-
-    [StructLayout(LayoutKind.Explicit, Size = 32)]
-    internal struct PropVariant : IDisposable
+    internal sealed class PropVariant : IDisposable
     {
+        // cannot be a property because it will be filled by reference
+        public PROPVARIANT Value;
+
+        public PropVariant()
+        {
+            this.Value = new PROPVARIANT();
+        }
+
+        public void Dispose()
+        {
+            NativeMethods.PropVariantClear(ref this.Value);
+        }
+
+        public VarType VariantType
+        {
+            get { return (VarType)this.Value.vt; }
+        }
+
+        public override string ToString()
+        {
+            return null;
+        }
+
+        public int ToInt()
+        {
+            return this.Value.inner.uiVal;
+        }
+
+        public ulong ToUlong()
+        {
+            return this.Value.inner.uhVal.QuadPart;
+        }
+
+
+        public DateTime ToDate()
+        {
+            return DateTime.FromOADate(this.Value.inner.date);
+        }
+
+        public bool ToBool()
+        {
+            return true;
+        }
+
+        public Guid ToGuid()
+        {
+            return new Guid();
+        }
+
+        public byte[] ToByteArray()
+        {
+            return null;
+        }
+
+        public static PropVariant StringToPropVariant(string s)
+        {
+            return new PropVariant();
+        }
+
+        public static PropVariant IntToPropVariant(int v)
+        {
+            return new PropVariant();
+        }
+
+        public static implicit operator string(PropVariant val)
+        {
+            return val.ToString();
+        }
+
+        public static implicit operator bool(PropVariant val)
+        {
+            return val.ToBool();
+        }
+
+        public static implicit operator DateTime(PropVariant val)
+        {
+            return val.ToDate();
+        }
+
+        public static implicit operator Guid(PropVariant val)
+        {
+            return val.ToGuid();
+        }
+
+        public static implicit operator int(PropVariant val)
+        {
+            return val.ToInt();
+        }
+
+        public static implicit operator ulong(PropVariant val)
+        {
+            return val.ToUlong();
+        }
+
+        public static implicit operator Byte[] (PropVariant val)
+        {
+            return val.ToByteArray();
+        }
+
+        private static class NativeMethods
+        {
+            [DllImport("ole32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+            static extern public int PropVariantClear(ref PROPVARIANT val);
+        }
+    }
+
+    /*
+    [StructLayout(LayoutKind.Explicit, Size = 32)]
+    internal class PropVariant
+    { 
         [FieldOffset(0)]
         public VarType variantType;
         [FieldOffset(8)]
@@ -29,6 +137,7 @@ namespace MediaDevices.Internal
         
         public static PropVariant FromValue(PROPVARIANT value)
         {
+            
             IntPtr ptrValue = Marshal.AllocHGlobal(Marshal.SizeOf(value));
             Marshal.StructureToPtr(value, ptrValue, false);
 
@@ -192,5 +301,5 @@ namespace MediaDevices.Internal
             return val.ToByteArray();
         }
     }
-
+    */
 }

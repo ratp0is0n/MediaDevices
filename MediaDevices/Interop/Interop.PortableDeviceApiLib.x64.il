@@ -447,15 +447,70 @@
   .field public uint8 wReserved1
   .field public uint8 wReserved2
   .field public uint32 wReserved3
-  .field public valuetype PortableDeviceApiLib.__MIDL___MIDL_itf_PortableDeviceApi_0001_0000_0001 __MIDL____MIDL_itf_PortableDeviceApi_0001_00000001
+  .field public valuetype PortableDeviceApiLib.PROPVARIANT_INNER inner
 } // end of class PortableDeviceApiLib.tag_inner_PROPVARIANT
 
-.class public explicit ansi sealed PortableDeviceApiLib.__MIDL___MIDL_itf_PortableDeviceApi_0001_0000_0001
+.class public explicit ansi sealed PortableDeviceApiLib.PROPVARIANT_INNER
        extends [mscorlib]System.ValueType
 {
   .pack 8
   .size 16
-} // end of class PortableDeviceApiLib.__MIDL___MIDL_itf_PortableDeviceApi_0001_0000_0001
+  .custom instance void [mscorlib]System.Runtime.InteropServices.ComConversionLossAttribute::.ctor() = ( 01 00 00 00 ) 
+  .field [0] public int8 cVal
+  .field [0] public uint8 bVal
+  .field [0] public int16 iVal
+  .field [0] public uint16 uiVal
+  .field [0] public int32 lVal
+  .field [0] public uint32 ulVal
+  .field [0] public int32 intVal
+  .field [0] public uint32 uintVal
+  .field [0] public valuetype PortableDeviceApiLib._LARGE_INTEGER hVal
+  .field [0] public valuetype PortableDeviceApiLib._ULARGE_INTEGER uhVal
+  .field [0] public float32 fltVal
+  .field [0] public float64 dblVal
+  .field [0] public int16 boolVal
+  .field [0] public int16 'bool'
+  .field [0] public  marshal( error) int32 scode
+  .field [0] public float64 'date'
+  .field [0] public valuetype PortableDeviceApiLib._FILETIME 'filetime'
+  .field [0] public valuetype PortableDeviceApiLib.tagBSTRBLOB bstrblobVal
+  .field [0] public valuetype PortableDeviceApiLib.tagBLOB 'blob'
+  .field [0] public valuetype PortableDeviceApiLib.tagCAC cac
+  .field [0] public valuetype PortableDeviceApiLib.tagCAUB caub
+  .field [0] public valuetype PortableDeviceApiLib.tagCAI cai
+  .field [0] public valuetype PortableDeviceApiLib.tagCAUI caui
+  .field [0] public valuetype PortableDeviceApiLib.tagCAL cal
+  .field [0] public valuetype PortableDeviceApiLib.tagCAUL caul
+  .field [0] public valuetype PortableDeviceApiLib.tagCAFLT caflt
+  .field [0] public valuetype PortableDeviceApiLib.tagCADBL cadbl
+  .field [0] public valuetype PortableDeviceApiLib.tagCABOOL cabool
+  .field [0] public valuetype PortableDeviceApiLib.tagCASCODE cascode
+  .field [0] public native int pcVal
+  .custom instance void [mscorlib]System.Runtime.InteropServices.ComConversionLossAttribute::.ctor() = ( 01 00 00 00 ) 
+  .field [0] public native int pbVal
+  .custom instance void [mscorlib]System.Runtime.InteropServices.ComConversionLossAttribute::.ctor() = ( 01 00 00 00 ) 
+  .field [0] public native int piVal
+  .custom instance void [mscorlib]System.Runtime.InteropServices.ComConversionLossAttribute::.ctor() = ( 01 00 00 00 ) 
+  .field [0] public native int puiVal
+  .custom instance void [mscorlib]System.Runtime.InteropServices.ComConversionLossAttribute::.ctor() = ( 01 00 00 00 ) 
+  .field [0] public native int plVal
+  .custom instance void [mscorlib]System.Runtime.InteropServices.ComConversionLossAttribute::.ctor() = ( 01 00 00 00 ) 
+  .field [0] public native int pulVal
+  .custom instance void [mscorlib]System.Runtime.InteropServices.ComConversionLossAttribute::.ctor() = ( 01 00 00 00 ) 
+  .field [0] public native int pintVal
+  .custom instance void [mscorlib]System.Runtime.InteropServices.ComConversionLossAttribute::.ctor() = ( 01 00 00 00 ) 
+  .field [0] public native int puintVal
+  .custom instance void [mscorlib]System.Runtime.InteropServices.ComConversionLossAttribute::.ctor() = ( 01 00 00 00 ) 
+  .field [0] public native int pfltVal
+  .custom instance void [mscorlib]System.Runtime.InteropServices.ComConversionLossAttribute::.ctor() = ( 01 00 00 00 ) 
+  .field [0] public native int pdblVal
+  .custom instance void [mscorlib]System.Runtime.InteropServices.ComConversionLossAttribute::.ctor() = ( 01 00 00 00 ) 
+  .field [0] public native int pboolVal
+  .custom instance void [mscorlib]System.Runtime.InteropServices.ComConversionLossAttribute::.ctor() = ( 01 00 00 00 ) 
+  .field [0] public native int pscode
+  .custom instance void [mscorlib]System.Runtime.InteropServices.ComConversionLossAttribute::.ctor() = ( 01 00 00 00 ) 
+
+} // end of class PortableDeviceApiLib.PROPVARIANT_INNER
 
 .class public sequential ansi sealed beforefieldinit PortableDeviceApiLib._LARGE_INTEGER
        extends [mscorlib]System.ValueType
