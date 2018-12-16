@@ -1551,8 +1551,10 @@ namespace MediaDevices
 
             try
             {
+                var g = functionalCategory.Guid();
                 IPortableDevicePropVariantCollection objects;
                 this.deviceCapabilities.GetFunctionalObjects(functionalCategory.Guid(), out objects);
+                ComTrace.WriteObject(objects);
                 return objects.ToStrings();
             }
             catch (COMException ex)

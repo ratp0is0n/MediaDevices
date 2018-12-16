@@ -5,6 +5,9 @@ using System.Text;
 using System.Runtime.InteropServices;
 using PROPVARIANT = PortableDeviceApiLib.tag_inner_PROPVARIANT;
 using TPROPVARIANT = PortableDeviceTypesLib.tag_inner_PROPVARIANT;
+using System.Diagnostics;
+using System.Runtime.ExceptionServices;
+using System.Security;
 
 namespace MediaDevices.Internal
 {
@@ -30,48 +33,188 @@ namespace MediaDevices.Internal
 
         public override string ToString()
         {
-            return null;
+            switch ((VarType)this.Value.vt)
+            {
+                //case VarType.VT_LPWSTR:
+                //    return Marshal.PtrToStringUni(pointerValue);
+
+                case VarType.VT_LPSTR:
+                    // Hack: pszVal seems to be missing, but pcVal has equal semantics
+                    return Marshal.PtrToStringAnsi(this.Value.inner.pcVal);
+
+                case VarType.VT_LPWSTR:
+                    // Hack: pwszVal seems to be missing, but pcVal has the correct type
+                    return Marshal.PtrToStringUni(this.Value.inner.pcVal);
+
+                case VarType.VT_BSTR:
+                    // Hack: bstrVal seems to be missing, but bstrblobVal has the same type
+                    Trace.WriteLine("GetString: BSTR is untested. If you see this message and everything works fine, you can remove this message.");
+                    return Marshal.PtrToStringBSTR(this.Value.inner.bstrblobVal.pData);
+
+
+                case VarType.VT_CLSID:
+                    return ToGuid().ToString();
+
+                case VarType.VT_DATE:
+                    return ToDate().ToString();
+
+                case VarType.VT_BOOL:
+                    return ToBool().ToString();
+
+                case VarType.VT_UI4:
+                    return ToUInt().ToString();
+
+                case VarType.VT_UI8:
+                    return ToUlong().ToString();
+
+                case VarType.VT_ERROR:
+                    int error = ToError();
+                    string name = Enum.GetName(typeof(HResult), error) ?? error.ToString("X");
+                    return $"Error: {name}";
+            }
+
+            return $"Unknown type {this.Value.vt}"; 
         }
 
         public int ToInt()
         {
-            return this.Value.inner.uiVal;
+            if ((VarType)this.Value.vt != VarType.VT_INT)
+            {
+                throw new InvalidOperationException($"ToInt does not work for value type {(VarType)this.Value.vt}");
+            }
+            return this.Value.inner.intVal;
+        }
+
+        public uint ToUInt()
+        {
+            if ((VarType)this.Value.vt != VarType.VT_UINT && (VarType)this.Value.vt != VarType.VT_UI4)
+            {
+                throw new InvalidOperationException($"ToUInt does not work for value type {(VarType)this.Value.vt}");
+            }
+            return this.Value.inner.uintVal;
         }
 
         public ulong ToUlong()
         {
+            if ((VarType)this.Value.vt != VarType.VT_UI8 && (VarType)this.Value.vt != VarType.VT_ERROR)
+            {
+                throw new InvalidOperationException($"ToUlong does not work for value type {(VarType)this.Value.vt}");
+            }
+            if ((VarType)this.Value.vt == VarType.VT_ERROR)
+            {
+                return 0;
+            }
             return this.Value.inner.uhVal.QuadPart;
         }
 
 
         public DateTime ToDate()
         {
+            if ((VarType)this.Value.vt != VarType.VT_DATE && (VarType)this.Value.vt != VarType.VT_ERROR)
+            {
+                throw new InvalidOperationException($"ToDate does not work for value type {(VarType)this.Value.vt}");
+            }
+            if ((VarType)this.Value.vt == VarType.VT_ERROR)
+            {
+                return new DateTime();
+            }
             return DateTime.FromOADate(this.Value.inner.date);
         }
 
         public bool ToBool()
         {
-            return true;
+            if ((VarType)this.Value.vt != VarType.VT_BOOL && (VarType)this.Value.vt != VarType.VT_ERROR)
+            {
+                throw new InvalidOperationException($"ToBool does not work for value type {(VarType)this.Value.vt}");
+            }
+            if ((VarType)this.Value.vt == VarType.VT_ERROR)
+            {
+                return false;
+            }
+            return this.Value.inner.boolVal != 0;
         }
 
         public Guid ToGuid()
         {
-            return new Guid();
+            if ((VarType)this.Value.vt != VarType.VT_CLSID)
+            {
+                throw new InvalidOperationException($"ToGuid does not work for value type {(VarType)this.Value.vt}");
+            }
+            return (Guid)Marshal.PtrToStructure(this.Value.inner.pcVal, typeof(Guid));
         }
 
+        [HandleProcessCorruptedStateExceptions]
+        [SecurityCritical]
         public byte[] ToByteArray()
         {
+            if ((VarType)this.Value.vt != (VarType.VT_VECTOR | VarType.VT_UI1))
+            {
+                throw new InvalidOperationException($"ToByteArray does not work for value type {(VarType)this.Value.vt}");
+            }
+
+            //int size = (int)this.Value.inner.caub.cElems;
+            //byte[] managedArray = new byte[size];
+            //try
+            //{
+            //    //Marshal.CopyToManaged(this.Value.inner.caub.pElems, managedArray, 0, size);
+
+            //    for (int i = 0; i < size; i++)
+            //    {
+            //        managedArray[i] = Marshal.ReadByte(this.Value.inner.caub.pElems, i);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return null;
+            //}
+            //return managedArray;
+
+            //Trace.WriteLine("GetString: BSTR is untested. If you see this message and everything works fine, you can remove this message.");
+
+            //uint size = this.Value.inner.caub.cElems;
+            //byte[] result = new byte[size];
+            //unsafe
+            //{
+            //    byte* basePtr = (byte*)this.Value.inner.caub.pElems.ToPointer();
+            //    for (uint i = 0; i < size; i++)
+            //    {
+            //        result[i] = basePtr[i];
+            //    }
+            //}
+            //return result; 
+
             return null;
         }
 
-        public static PropVariant StringToPropVariant(string s)
+        public int ToError()
         {
-            return new PropVariant();
+            return this.Value.inner.scode;
+        }
+            
+
+        public static PropVariant StringToPropVariant(string value)
+        {
+            PropVariant pv = new PropVariant();
+            pv.Value.vt = (ushort)VarType.VT_LPWSTR;
+            // Hack, see GetString
+            pv.Value.inner.pcVal = Marshal.StringToCoTaskMemUni(value);
+            return pv;
         }
 
-        public static PropVariant IntToPropVariant(int v)
+        public static PropVariant UIntToPropVariant(uint value)
         {
-            return new PropVariant();
+            PropVariant pv = new PropVariant();
+            pv.Value.vt = (ushort)VarType.VT_UI4;
+            pv.Value.inner.ulVal = value;
+            return pv;
+        }
+
+        public static PropVariant IntToPropVariant(int value)
+        {
+            PropVariant pv = new PropVariant();
+            pv.Value.vt = (ushort)VarType.VT_INT;
+            pv.Value.inner.intVal = value;
+            return pv;
         }
 
         public static implicit operator string(PropVariant val)

@@ -206,7 +206,7 @@ namespace MediaDevicesUnitTest
 
             double milliseconds = ((double)stopwatch.ElapsedTicks / Stopwatch.Frequency) * 1000;
 
-            Assert.AreEqual(0.0, milliseconds, "time");
+            //Assert.AreEqual(0.0, milliseconds, "time");
         }
     }
 }

@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;noCOMTRACE, noPROFILING</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;COMTRACE, noPROFILING</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -85,8 +85,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Choose>
-    <When Condition=" '$(Platform)' == 'AnyCPU' " >
-	  <ItemGroup>
+    <When Condition=" '$(Platform)' == 'AnyCPU' ">
+      <ItemGroup>
         <Reference Include="Interop.PortableDeviceApiLib.any">
           <HintPath>Interop\Interop.PortableDeviceApiLib.any.dll</HintPath>
           <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -96,7 +96,7 @@
           <EmbedInteropTypes>True</EmbedInteropTypes>
         </Reference>
       </ItemGroup>
-	</When>
+    </When>
     <When Condition=" '$(Platform)' == 'x64' ">
       <ItemGroup>
         <Reference Include="Interop.PortableDeviceApiLib.x64">
