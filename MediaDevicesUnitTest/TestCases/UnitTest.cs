@@ -41,6 +41,17 @@ namespace MediaDevicesUnitTest
         protected string FilePersistentUniqueId;
         protected string FilePersistentUniqueIdPath;
 
+        private TestContext testContextInstance;
+
+        /// <summary>
+        /// Gets or sets the test context which provides information about and functionality for the current test run.
+        ///</summary>
+        public TestContext TestContext
+        {
+            get { return testContextInstance; }
+            set { testContextInstance = value; }
+        }
+
 
         public UnitTest()
         {
@@ -207,6 +218,14 @@ namespace MediaDevicesUnitTest
             double milliseconds = ((double)stopwatch.ElapsedTicks / Stopwatch.Frequency) * 1000;
 
             //Assert.AreEqual(0.0, milliseconds, "time");
+        }
+
+        [TestMethod]
+        [Description("Architecture test.")]
+        public void ArchitectureTest()
+        {
+            int size = IntPtr.Size;
+            TestContext.WriteLine($"Pointer size if {size}");
         }
     }
 }

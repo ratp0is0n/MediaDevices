@@ -11,6 +11,8 @@ using System.Security;
 
 namespace MediaDevices.Internal
 {
+    // https://docs.microsoft.com/de-de/windows/desktop/api/propidl/ns-propidl-tagpropvariant
+
     internal sealed class PropVariant : IDisposable
     {
         // cannot be a property because it will be filled by reference
@@ -23,7 +25,18 @@ namespace MediaDevices.Internal
 
         public void Dispose()
         {
-            NativeMethods.PropVariantClear(ref this.Value);
+            // clear only if filled
+            if (this.Value.vt != 0)
+            {
+                try
+                {
+                    NativeMethods.PropVariantClear(ref this.Value);
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.ToString());
+                }
+            }
         }
 
         public VarType VariantType
@@ -35,22 +48,21 @@ namespace MediaDevices.Internal
         {
             switch ((VarType)this.Value.vt)
             {
-                //case VarType.VT_LPWSTR:
-                //    return Marshal.PtrToStringUni(pointerValue);
-
                 case VarType.VT_LPSTR:
                     // Hack: pszVal seems to be missing, but pcVal has equal semantics
+                    //return Marshal.PtrToStringAnsi(this.Value.inner.pszVal);
                     return Marshal.PtrToStringAnsi(this.Value.inner.pcVal);
 
                 case VarType.VT_LPWSTR:
                     // Hack: pwszVal seems to be missing, but pcVal has the correct type
+                    //return Marshal.PtrToStringUni(this.Value.inner.pwszVal);
                     return Marshal.PtrToStringUni(this.Value.inner.pcVal);
 
                 case VarType.VT_BSTR:
                     // Hack: bstrVal seems to be missing, but bstrblobVal has the same type
                     Trace.WriteLine("GetString: BSTR is untested. If you see this message and everything works fine, you can remove this message.");
+                    //return Marshal.PtrToStringBSTR(this.Value.inner.bstrVal);
                     return Marshal.PtrToStringBSTR(this.Value.inner.bstrblobVal.pData);
-
 
                 case VarType.VT_CLSID:
                     return ToGuid().ToString();
@@ -78,68 +90,92 @@ namespace MediaDevices.Internal
 
         public int ToInt()
         {
-            if ((VarType)this.Value.vt != VarType.VT_INT)
+            if ((VarType)this.Value.vt == VarType.VT_ERROR)
+            {
+                return 0;
+            }
+
+            if ((VarType)this.Value.vt != VarType.VT_INT && (VarType)this.Value.vt != VarType.VT_I4)
             {
                 throw new InvalidOperationException($"ToInt does not work for value type {(VarType)this.Value.vt}");
             }
+
             return this.Value.inner.intVal;
         }
 
         public uint ToUInt()
         {
+            if ((VarType)this.Value.vt == VarType.VT_ERROR)
+            {
+                return 0;
+            }
+
             if ((VarType)this.Value.vt != VarType.VT_UINT && (VarType)this.Value.vt != VarType.VT_UI4)
             {
                 throw new InvalidOperationException($"ToUInt does not work for value type {(VarType)this.Value.vt}");
             }
+
             return this.Value.inner.uintVal;
         }
 
         public ulong ToUlong()
         {
-            if ((VarType)this.Value.vt != VarType.VT_UI8 && (VarType)this.Value.vt != VarType.VT_ERROR)
-            {
-                throw new InvalidOperationException($"ToUlong does not work for value type {(VarType)this.Value.vt}");
-            }
             if ((VarType)this.Value.vt == VarType.VT_ERROR)
             {
                 return 0;
             }
+
+            if ((VarType)this.Value.vt != VarType.VT_UI8)
+            {
+                throw new InvalidOperationException($"ToUlong does not work for value type {(VarType)this.Value.vt}");
+            }
+            
             return this.Value.inner.uhVal.QuadPart;
         }
 
 
         public DateTime ToDate()
         {
-            if ((VarType)this.Value.vt != VarType.VT_DATE && (VarType)this.Value.vt != VarType.VT_ERROR)
-            {
-                throw new InvalidOperationException($"ToDate does not work for value type {(VarType)this.Value.vt}");
-            }
             if ((VarType)this.Value.vt == VarType.VT_ERROR)
             {
                 return new DateTime();
             }
+
+            if ((VarType)this.Value.vt != VarType.VT_DATE)
+            {
+                throw new InvalidOperationException($"ToDate does not work for value type {(VarType)this.Value.vt}");
+            }
+            
             return DateTime.FromOADate(this.Value.inner.date);
         }
 
         public bool ToBool()
         {
-            if ((VarType)this.Value.vt != VarType.VT_BOOL && (VarType)this.Value.vt != VarType.VT_ERROR)
-            {
-                throw new InvalidOperationException($"ToBool does not work for value type {(VarType)this.Value.vt}");
-            }
             if ((VarType)this.Value.vt == VarType.VT_ERROR)
             {
                 return false;
             }
+
+            if ((VarType)this.Value.vt != VarType.VT_BOOL)
+            {
+                throw new InvalidOperationException($"ToBool does not work for value type {(VarType)this.Value.vt}");
+            }
+
             return this.Value.inner.boolVal != 0;
         }
 
         public Guid ToGuid()
         {
+            if ((VarType)this.Value.vt == VarType.VT_ERROR)
+            {
+                return new Guid();
+            }
+
             if ((VarType)this.Value.vt != VarType.VT_CLSID)
             {
                 throw new InvalidOperationException($"ToGuid does not work for value type {(VarType)this.Value.vt}");
             }
+
             return (Guid)Marshal.PtrToStructure(this.Value.inner.pcVal, typeof(Guid));
         }
 
@@ -152,42 +188,28 @@ namespace MediaDevices.Internal
                 throw new InvalidOperationException($"ToByteArray does not work for value type {(VarType)this.Value.vt}");
             }
 
-            //int size = (int)this.Value.inner.caub.cElems;
-            //byte[] managedArray = new byte[size];
-            //try
-            //{
-            //    //Marshal.CopyToManaged(this.Value.inner.caub.pElems, managedArray, 0, size);
-
-            //    for (int i = 0; i < size; i++)
-            //    {
-            //        managedArray[i] = Marshal.ReadByte(this.Value.inner.caub.pElems, i);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    return null;
-            //}
-            //return managedArray;
-
-            //Trace.WriteLine("GetString: BSTR is untested. If you see this message and everything works fine, you can remove this message.");
-
-            //uint size = this.Value.inner.caub.cElems;
-            //byte[] result = new byte[size];
-            //unsafe
-            //{
-            //    byte* basePtr = (byte*)this.Value.inner.caub.pElems.ToPointer();
-            //    for (uint i = 0; i < size; i++)
-            //    {
-            //        result[i] = basePtr[i];
-            //    }
-            //}
-            //return result; 
-
-            return null;
+            int size = (int)this.Value.inner.caub.cElems;
+            byte[] managedArray = new byte[size];
+            try
+            {
+                // !!! Does work for x86 and x64 but not for Any CPU !!!
+                Marshal.Copy(this.Value.inner.caub.pElems, managedArray, 0, size);
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.ToString());
+                return null;
+            }
+            return managedArray;
         }
 
         public int ToError()
         {
+            if ((VarType)this.Value.vt != VarType.VT_ERROR)
+            {
+                return 0;
+            }
+
             return this.Value.inner.scode;
         }
             
