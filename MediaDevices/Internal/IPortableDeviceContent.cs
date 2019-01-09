@@ -21,7 +21,7 @@ namespace MediaDevices.Internal
 
         void CreateObjectWithPropertiesOnly(
             [In, MarshalAs(UnmanagedType.Interface)] IPortableDeviceValues pValues,
-            [In, Out, MarshalAs(UnmanagedType.Interface)] ref string ppszObjectID);
+            [In, Out, MarshalAs(UnmanagedType.LPWStr)] ref string ppszObjectID);
 
         void CreateObjectWithPropertiesAndData(
             [In, MarshalAs(UnmanagedType.Interface)] IPortableDeviceValues pValues,

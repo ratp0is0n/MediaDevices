@@ -15,6 +15,7 @@ namespace MediaDevices
     [DebuggerDisplay("{FriendlyName}, {Manufacturer}, {Description}")]
     public sealed class MediaDevice : IDisposable
     {
+        // https://msdn.microsoft.com/en-us/ie/aa645736%28v=vs.94%29?f=255&MSPPError=-2147217396
 
         #region Fields
 
