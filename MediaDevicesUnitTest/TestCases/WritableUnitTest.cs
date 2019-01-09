@@ -62,38 +62,38 @@ namespace MediaDevicesUnitTest
             device.UploadFolder(sourceFolder, destFolder);
         }
 
-        [TestMethod]
-        [Description("Test event handling.")]
-        public void EventTest()
-        {
-            //if (!this.supEvent) return;
+        //[TestMethod]
+        //[Description("Test event handling.")]
+        //public void EventTest()
+        //{
+        //    //if (!this.supEvent) return;
 
-            AutoResetEvent fired = new AutoResetEvent(false);
+        //    AutoResetEvent fired = new AutoResetEvent(false);
 
-            var devices = MediaDevice.GetDevices();
-            var device = devices.FirstOrDefault(this.deviceSelect);
-            Assert.IsNotNull(device, "Device");
-            device.ObjectRemoved += (s, a) => fired.Set();
-            device.Connect();
+        //    var devices = MediaDevice.GetDevices();
+        //    var device = devices.FirstOrDefault(this.deviceSelect);
+        //    Assert.IsNotNull(device, "Device");
+        //    device.ObjectRemoved += (s, a) => fired.Set();
+        //    device.Connect();
 
-            string filePath = Path.Combine(this.workingFolder, "Test.txt");
-            if (device.FileExists(filePath))
-            {
-                device.DeleteFile(filePath);
-            }
+        //    string filePath = Path.Combine(this.workingFolder, "Test.txt");
+        //    if (device.FileExists(filePath))
+        //    {
+        //        device.DeleteFile(filePath);
+        //    }
 
-            using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes("This is a test.")))
-            {
-                device.UploadFile(stream, filePath);
-            }
+        //    using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes("This is a test.")))
+        //    {
+        //        device.UploadFile(stream, filePath);
+        //    }
 
-            device.DeleteFile(filePath);
+        //    device.DeleteFile(filePath);
 
-            bool isFired = fired.WaitOne(new TimeSpan(0, 10, 0));
-            device.Disconnect();
+        //    bool isFired = fired.WaitOne(new TimeSpan(0, 10, 0));
+        //    device.Disconnect();
 
-            Assert.IsTrue(isFired);
-        }
+        //    Assert.IsTrue(isFired);
+        //}
 
         [TestMethod]
         [Description("Creating a new folder.")]

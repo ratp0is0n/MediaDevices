@@ -33,7 +33,7 @@ namespace MediaDevices
             }
         }
 
-        public StreamWrapper(PortableDeviceApiLib.IStream stream) : this((IStream)stream) 
+        public StreamWrapper(Internal.IStream stream) : this((IStream)stream) 
         { }
 
         public StreamWrapper(IStream stream)

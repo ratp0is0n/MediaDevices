@@ -1,17 +1,10 @@
-﻿using System.Diagnostics;
-using System;
-using System.IO;
+﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using PortableDeviceApiLib;
-using PortableDeviceTypesLib;
-using IPortableDeviceKeyCollection = PortableDeviceApiLib.IPortableDeviceKeyCollection;
-using IPortableDeviceValues = PortableDeviceApiLib.IPortableDeviceValues;
-using IPortableDevicePropVariantCollection = PortableDeviceApiLib.IPortableDevicePropVariantCollection;
-using PropertyKey = PortableDeviceApiLib._tagpropertykey;
-using PROPVARIANT = PortableDeviceApiLib.tag_inner_PROPVARIANT;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MediaDevices.Internal
 {
@@ -24,23 +17,23 @@ namespace MediaDevices.Internal
         static Item()
         {
             // key collection with all used properties
-            keyCollection = (IPortableDeviceKeyCollection)new PortableDeviceTypesLib.PortableDeviceKeyCollection();
-            keyCollection.Add(WPD.OBJECT_CONTENT_TYPE);
-            keyCollection.Add(WPD.OBJECT_NAME);
-            keyCollection.Add(WPD.OBJECT_ORIGINAL_FILE_NAME);
+            keyCollection = (IPortableDeviceKeyCollection)new PortableDeviceKeyCollection();
+            keyCollection.Add(ref WPD.OBJECT_CONTENT_TYPE);
+            keyCollection.Add(ref WPD.OBJECT_NAME);
+            keyCollection.Add(ref WPD.OBJECT_ORIGINAL_FILE_NAME);
 
-            keyCollection.Add(WPD.OBJECT_HINT_LOCATION_DISPLAY_NAME);
-            keyCollection.Add(WPD.OBJECT_CONTAINER_FUNCTIONAL_OBJECT_ID);
-            keyCollection.Add(WPD.OBJECT_SIZE);
-            keyCollection.Add(WPD.OBJECT_DATE_CREATED);
-            keyCollection.Add(WPD.OBJECT_DATE_MODIFIED);
-            keyCollection.Add(WPD.OBJECT_DATE_AUTHORED);
-            keyCollection.Add(WPD.OBJECT_CAN_DELETE);
-            keyCollection.Add(WPD.OBJECT_ISSYSTEM);
-            keyCollection.Add(WPD.OBJECT_ISHIDDEN);
-            keyCollection.Add(WPD.OBJECT_IS_DRM_PROTECTED);
-            keyCollection.Add(WPD.OBJECT_PARENT_ID);
-            keyCollection.Add(WPD.OBJECT_PERSISTENT_UNIQUE_ID);
+            keyCollection.Add(ref WPD.OBJECT_HINT_LOCATION_DISPLAY_NAME);
+            keyCollection.Add(ref WPD.OBJECT_CONTAINER_FUNCTIONAL_OBJECT_ID);
+            keyCollection.Add(ref WPD.OBJECT_SIZE);
+            keyCollection.Add(ref WPD.OBJECT_DATE_CREATED);
+            keyCollection.Add(ref WPD.OBJECT_DATE_MODIFIED);
+            keyCollection.Add(ref WPD.OBJECT_DATE_AUTHORED);
+            keyCollection.Add(ref WPD.OBJECT_CAN_DELETE);
+            keyCollection.Add(ref WPD.OBJECT_ISSYSTEM);
+            keyCollection.Add(ref WPD.OBJECT_ISHIDDEN);
+            keyCollection.Add(ref WPD.OBJECT_IS_DRM_PROTECTED);
+            keyCollection.Add(ref WPD.OBJECT_PARENT_ID);
+            keyCollection.Add(ref WPD.OBJECT_PERSISTENT_UNIQUE_ID);
         }
 
         private MediaDevice device;
@@ -533,14 +526,15 @@ namespace MediaDevices.Internal
 
         public void Delete(bool recursive = false)
         {
-            var objectIdCollection = (IPortableDevicePropVariantCollection)new PortableDeviceTypesLib.PortableDevicePropVariantCollection();
+            var objectIdCollection = (IPortableDevicePropVariantCollection)new PortableDevicePropVariantCollection();
 
             var propVariantValue = PropVariant.StringToPropVariant(this.Id);
             objectIdCollection.Add(ref propVariantValue.Value);
 
-            IPortableDevicePropVariantCollection results = (PortableDeviceApiLib.IPortableDevicePropVariantCollection) new PortableDevicePropVariantCollection();
+            IPortableDevicePropVariantCollection results = (IPortableDevicePropVariantCollection) new PortableDevicePropVariantCollection();
             // TODO: get the results back and handle failures correctly
-            this.device.deviceContent.Delete(recursive ? PORTABLE_DEVICE_DELETE_WITH_RECURSION : PORTABLE_DEVICE_DELETE_NO_RECURSION, objectIdCollection, null);
+            
+            this.device.deviceContent.Delete(recursive ? PORTABLE_DEVICE_DELETE_WITH_RECURSION : PORTABLE_DEVICE_DELETE_NO_RECURSION, objectIdCollection, ref results);
 
             ComTrace.WriteObject(objectIdCollection);
         }
@@ -609,7 +603,7 @@ namespace MediaDevices.Internal
         {
             this.device.deviceContent.Transfer(out IPortableDeviceResources resources);
 
-            PortableDeviceApiLib.IStream wpdStream;
+            IStream wpdStream;
             uint optimalTransferSize = 0;
 
             resources.GetStream(this.Id, ref WPD.RESOURCE_DEFAULT, 0, ref optimalTransferSize, out wpdStream);
@@ -629,7 +623,7 @@ namespace MediaDevices.Internal
 
             uint num = 0u;
             string text = null;
-            this.device.deviceContent.CreateObjectWithPropertiesAndData(portableDeviceValues, out PortableDeviceApiLib.IStream wpdStream, ref num, ref text);
+            this.device.deviceContent.CreateObjectWithPropertiesAndData(portableDeviceValues, out IStream wpdStream, ref num, ref text);
 
             using (StreamWrapper destinationStream = new StreamWrapper(wpdStream))
             {

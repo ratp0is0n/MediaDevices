@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
-using PROPVARIANT = PortableDeviceApiLib.tag_inner_PROPVARIANT;
-using TPROPVARIANT = PortableDeviceTypesLib.tag_inner_PROPVARIANT;
 using System.Diagnostics;
 using System.Runtime.ExceptionServices;
+using System.Runtime.InteropServices;
 using System.Security;
 
 namespace MediaDevices.Internal

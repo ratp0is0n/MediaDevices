@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using IPortableDeviceValues = PortableDeviceApiLib.IPortableDeviceValues;
-using PropertyKey = PortableDeviceApiLib._tagpropertykey;
-using PROPVARIANT = PortableDeviceApiLib.tag_inner_PROPVARIANT;
+
 
 namespace MediaDevices.Internal
 {
@@ -38,7 +36,7 @@ namespace MediaDevices.Internal
         {
             using (PropVariant val = new PropVariant())
             {
-                values.GetValue(key, out val.Value);
+                values.GetValue(ref key, out val.Value);
                 return val.VariantType;
             }
         }
@@ -48,7 +46,7 @@ namespace MediaDevices.Internal
             if (values.HasKeyValue(key))
             {
                 PropVariant val = new PropVariant();
-                values.GetValue(key, out val.Value);
+                values.GetValue(ref key, out val.Value);
                 value = val;
                 return true;
             }
@@ -62,7 +60,7 @@ namespace MediaDevices.Internal
             {
                 using (PropVariant val = new PropVariant())
                 {
-                    values.GetValue(key, out val.Value);
+                    values.GetValue(ref key, out val.Value);
                     value = val.ToDate();
                 }
                 return true;
@@ -75,7 +73,7 @@ namespace MediaDevices.Internal
         {
             if (values.HasKeyValue(key))
             {
-                values.GetStringValue(key, out value);
+                values.GetStringValue(ref key, out value);
                 return true;
             }
             value = string.Empty;
@@ -86,7 +84,7 @@ namespace MediaDevices.Internal
         {
             if (values.HasKeyValue(key))
             {
-                values.GetGuidValue(key, out value);
+                values.GetGuidValue(ref key, out value);
                 return true;
             }
             value = Guid.Empty;
@@ -98,7 +96,7 @@ namespace MediaDevices.Internal
             if (values.HasKeyValue(key))
             {
                 int val;
-                values.GetBoolValue(key, out val);
+                values.GetBoolValue(ref key, out val);
                 value = val != 0;
                 return true;
             }
@@ -110,7 +108,7 @@ namespace MediaDevices.Internal
         {
             if (values.HasKeyValue(key))
             {
-                values.GetUnsignedIntegerValue(key, out value);
+                values.GetUnsignedIntegerValue(ref key, out value);
                 return true;
             }
             value = 0;
@@ -121,7 +119,7 @@ namespace MediaDevices.Internal
         {
             if (values.HasKeyValue(key))
             {
-                values.GetUnsignedLargeIntegerValue(key, out value);
+                values.GetUnsignedLargeIntegerValue(ref key, out value);
                 return true;
             }
             value = 0;
@@ -132,7 +130,7 @@ namespace MediaDevices.Internal
         {
             if (values.HasKeyValue(key))
             {
-                values.GetSignedIntegerValue(key, out value);
+                values.GetSignedIntegerValue(ref key, out value);
                 return true;
             }
             value = 0;
@@ -143,7 +141,7 @@ namespace MediaDevices.Internal
         {
             if (values.HasKeyValue(key))
             {
-                values.GetIUnknownValue(key, out value);
+                values.GetIUnknownValue(ref key, out value);
                 return true;
             }
             value = null;
@@ -156,7 +154,7 @@ namespace MediaDevices.Internal
             {
                 using (PropVariant val = new PropVariant())
                 {
-                    values.GetValue(key, out val.Value);
+                    values.GetValue(ref key, out val.Value);
                     value = val.ToByteArray();
                 }
                 return true;
