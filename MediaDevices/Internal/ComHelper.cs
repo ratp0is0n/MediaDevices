@@ -13,13 +13,13 @@ namespace MediaDevices.Internal
             for (uint i = 0; i < num; i++)
             {
                 PropertyKey key = new PropertyKey();
-                using (PropVariant val = new PropVariant())
+                using (PropVariantFacade val = new PropVariantFacade())
                 {
                     values.GetAt(i, ref key, ref val.Value);
                     if (key.fmtid == findKey.fmtid && key.pid == findKey.pid)
                     {
                         
-                        return val.VariantType != VarType.VT_ERROR;
+                        return val.VariantType != PropVariantType.VT_ERROR;
                     }
                 }
             }
@@ -32,20 +32,20 @@ namespace MediaDevices.Internal
             return a.fmtid == b.fmtid && a.pid == b.pid;
         }
 
-        public static VarType GetVarType(this IPortableDeviceValues values, PropertyKey key)
+        public static PropVariantType GetVarType(this IPortableDeviceValues values, PropertyKey key)
         {
-            using (PropVariant val = new PropVariant())
+            using (PropVariantFacade val = new PropVariantFacade())
             {
                 values.GetValue(ref key, out val.Value);
                 return val.VariantType;
             }
         }
 
-        internal static bool TryGetValue(this IPortableDeviceValues values, PropertyKey key, out PropVariant value)
+        internal static bool TryGetValue(this IPortableDeviceValues values, PropertyKey key, out PropVariantFacade value)
         {
             if (values.HasKeyValue(key))
             {
-                PropVariant val = new PropVariant();
+                PropVariantFacade val = new PropVariantFacade();
                 values.GetValue(ref key, out val.Value);
                 value = val;
                 return true;
@@ -58,7 +58,7 @@ namespace MediaDevices.Internal
         {
             if (values.HasKeyValue(key))
             {
-                using (PropVariant val = new PropVariant())
+                using (PropVariantFacade val = new PropVariantFacade())
                 {
                     values.GetValue(ref key, out val.Value);
                     value = val.ToDate();
@@ -152,7 +152,7 @@ namespace MediaDevices.Internal
         {
             if (values.HasKeyValue(key))
             {
-                using (PropVariant val = new PropVariant())
+                using (PropVariantFacade val = new PropVariantFacade())
                 {
                     values.GetValue(ref key, out val.Value);
                     value = val.ToByteArray();
@@ -168,7 +168,7 @@ namespace MediaDevices.Internal
             // http://www.pinvoke.net/default.aspx/iprop/PropVariantClear.html
             // https://social.msdn.microsoft.com/Forums/windowsserver/en-US/ec242718-8738-4468-ae9d-9734113d2dea/quotipropdllquot-seems-to-be-missing-in-windows-server-2008-and-x64-systems?forum=winserver2008appcompatabilityandcertification
             [DllImport("ole32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-            static extern public int PropVariantClear(ref PROPVARIANT val);
+            static extern public int PropVariantClear(ref PropVariant val);
         }
     }
 }

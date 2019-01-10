@@ -46,7 +46,7 @@ namespace MediaDevices.Internal
             IPortableDevicePropVariantCollection col = (IPortableDevicePropVariantCollection) new PortableDevicePropVariantCollection();
             foreach (var value in values)
             {
-                var var = PropVariant.IntToPropVariant(value);
+                var var = PropVariantFacade.IntToPropVariant(value);
                 col.Add(ref var.Value);
             }
             this.values.SetIPortableDevicePropVariantCollectionValue(ref key, col);
@@ -84,7 +84,7 @@ namespace MediaDevices.Internal
             return value;
         }
         
-        public IEnumerable<PropVariant> GetPropVariants(PropertyKey key) 
+        public IEnumerable<PropVariantFacade> GetPropVariants(PropertyKey key) 
         {
             object obj = null;
             this.result.GetIUnknownValue(ref key, out obj);
@@ -94,7 +94,7 @@ namespace MediaDevices.Internal
             col.GetCount(ref count);
             for (uint i = 0; i < count; i++)
             {
-                PropVariant val = new PropVariant();
+                PropVariantFacade val = new PropVariantFacade();
                 col.GetAt(i, ref val.Value);
                 yield return val;
             }
@@ -107,7 +107,7 @@ namespace MediaDevices.Internal
             for (uint i = 0; i < count; i++)
             {
                 PropertyKey k = new PropertyKey();
-                PROPVARIANT v = new PROPVARIANT();
+                PropVariant v = new PropVariant();
                 this.result.GetAt(i, ref k, ref v);
                 if (key.fmtid == k.fmtid && key.pid == k.pid)
                 {

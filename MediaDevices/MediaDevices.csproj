@@ -74,8 +74,8 @@
     <Compile Include="Internal\PortableDeviceValues.cs" />
     <Compile Include="Internal\PropertyKey.cs" />
     <Compile Include="Internal\PropertyKeys.cs" />
-    <Compile Include="Internal\_PROPVARIANT.cs" />
-    <Compile Include="Internal\_PROPVARIANT_INNER.cs" />
+    <Compile Include="Internal\PropVariant.cs" />
+    <Compile Include="Internal\PropVariantData.cs" />
     <Compile Include="MediaDriveInfo.cs" />
     <Compile Include="Internal\ComHelper.cs" />
     <Compile Include="Internal\Command.cs" />
@@ -91,7 +91,7 @@
     <Compile Include="Internal\KeyAttribute.cs" />
     <Compile Include="Internal\Profiler.cs" />
     <Compile Include="Internal\SmsMessageType.cs" />
-    <Compile Include="Internal\VarType.cs" />
+    <Compile Include="Internal\PropVariantType.cs" />
     <Compile Include="Internal\WPD.cs" />
     <Compile Include="MediaDevice.cs" />
     <Compile Include="MediaDeviceEventArgs.cs" />
@@ -106,7 +106,7 @@
     <Compile Include="OperationState.cs" />
     <Compile Include="PowerSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Internal\PropVariant.cs" />
+    <Compile Include="Internal\PropVariantFacade.cs" />
     <Compile Include="Internal\StreamWrapper.cs" />
     <Compile Include="StorageAccessCapability.cs" />
     <Compile Include="StorageType.cs" />

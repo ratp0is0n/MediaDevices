@@ -13,15 +13,15 @@ namespace MediaDevices.Internal
         void GetAt(
             [In] uint index,
             [In, Out] ref PropertyKey pKey,
-            [In, Out] ref PROPVARIANT pValue);
+            [In, Out] ref PropVariant pValue);
 
         void SetValue(
             [In] ref PropertyKey key,
-            [In] ref PROPVARIANT pValue);
+            [In] ref PropVariant pValue);
 
         void GetValue(
             [In] ref PropertyKey key,
-            [Out] out PROPVARIANT pValue);
+            [Out] out PropVariant pValue);
 
         void SetStringValue(
             [In] ref PropertyKey key,

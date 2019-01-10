@@ -58,7 +58,7 @@ namespace MediaDevices.Internal
             for (uint i = 0; i < num; i++)
             {
                 PropertyKey key = new PropertyKey();
-                PropVariant val = new PropVariant();
+                PropVariantFacade val = new PropVariantFacade();
                 values.GetAt(i, ref key, ref val.Value);
 
                 FieldInfo field = FindPropertyKeyField(key);
@@ -68,7 +68,7 @@ namespace MediaDevices.Internal
 
                 switch (val.VariantType)
                 {
-                case VarType.VT_CLSID:
+                case PropVariantType.VT_CLSID:
                     Trace.WriteLine($"##### {fieldName} = {FindGuidField(val.ToGuid())?.Name ?? val.ToString()}");
                     break;
                 default:
@@ -86,7 +86,7 @@ namespace MediaDevices.Internal
             collection.GetCount(ref num);
             for (uint index = 0; index < num; index++)
             {
-                using (PropVariant val = new PropVariant())
+                using (PropVariantFacade val = new PropVariantFacade())
                 {
                     collection.GetAt(index, ref val.Value);
 

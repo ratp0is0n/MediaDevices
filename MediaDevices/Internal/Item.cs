@@ -96,7 +96,7 @@ namespace MediaDevices.Internal
             // fill collection with id to request
             var collection = (IPortableDevicePropVariantCollection)new PortableDevicePropVariantCollection();
 
-            using (var propVariantPUID = PropVariant.StringToPropVariant(persistentUniqueId))
+            using (var propVariantPUID = PropVariantFacade.StringToPropVariant(persistentUniqueId))
             {
                 collection.Add(ref propVariantPUID.Value);
             }
@@ -209,7 +209,7 @@ namespace MediaDevices.Internal
             for (uint i = 0; i < num; i++)
             {
                 PropertyKey key = new PropertyKey();
-                using (PropVariant val = new PropVariant())
+                using (PropVariantFacade val = new PropVariantFacade())
                 {
                     values.GetAt(i, ref key, ref val.Value);
 
@@ -528,7 +528,7 @@ namespace MediaDevices.Internal
         {
             var objectIdCollection = (IPortableDevicePropVariantCollection)new PortableDevicePropVariantCollection();
 
-            var propVariantValue = PropVariant.StringToPropVariant(this.Id);
+            var propVariantValue = PropVariantFacade.StringToPropVariant(this.Id);
             objectIdCollection.Add(ref propVariantValue.Value);
 
             IPortableDevicePropVariantCollection results = (IPortableDevicePropVariantCollection) new PortableDevicePropVariantCollection();

@@ -12,10 +12,10 @@ namespace MediaDevices.Internal
 
         void GetAt(
             [In] uint dwIndex, 
-            [In] ref PROPVARIANT pValue);
+            [In] ref PropVariant pValue);
 
         void Add(
-            [In] ref PROPVARIANT pValue);
+            [In] ref PropVariant pValue);
 
         void GetType(
             [Out] out ushort pvt);

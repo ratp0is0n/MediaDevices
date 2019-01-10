@@ -33,7 +33,7 @@ namespace MediaDevices.Internal
             col.GetCount(ref count);
             for (uint i = 0; i < count; i++)
             {
-                PropVariant val = new PropVariant();
+                PropVariantFacade val = new PropVariantFacade();
                 col.GetAt(i, ref val.Value);
                 yield return GetEnumFromAttrGuid<TEnum>(val.ToGuid());
             }
@@ -73,7 +73,7 @@ namespace MediaDevices.Internal
             col.GetCount(ref count);
             for (uint i = 0; i < count; i++)
             {
-                using (PropVariant val = new PropVariant())
+                using (PropVariantFacade val = new PropVariantFacade())
                 {
                     col.GetAt(i, ref val.Value);
                     yield return val.ToGuid();
@@ -87,7 +87,7 @@ namespace MediaDevices.Internal
             col.GetCount(ref count);
             for (uint i = 0; i < count; i++)
             {
-                using (PropVariant val = new PropVariant())
+                using (PropVariantFacade val = new PropVariantFacade())
                 {
                     col.GetAt(i, ref val.Value);
                     yield return val.ToString();

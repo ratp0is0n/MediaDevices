@@ -16,11 +16,11 @@ namespace MediaDevices.Internal
 
         void GetValue(
             [In] ref PropertyKey key, 
-            [Out] out PROPVARIANT pv);
+            [Out] out PropVariant pv);
 
         void SetValue(
             [In] ref PropertyKey key,
-            [In] ref PROPVARIANT propvar);
+            [In] ref PropVariant propvar);
 
         void Commit();
     }
