@@ -64,8 +64,6 @@
     <Compile Include="Internal\IPortableDeviceValues.cs" />
     <Compile Include="Internal\IPortableDeviceValuesCollection.cs" />
     <Compile Include="Internal\IPropertyStore.cs" />
-    <Compile Include="Internal\ISequentialStream.cs" />
-    <Compile Include="Internal\IStream.cs" />
     <Compile Include="Internal\ObjectProperties.cs" />
     <Compile Include="Internal\PortableDevice.cs" />
     <Compile Include="Internal\PortableDeviceKeyCollection.cs" />

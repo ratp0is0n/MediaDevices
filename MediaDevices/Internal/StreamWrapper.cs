@@ -33,9 +33,6 @@ namespace MediaDevices
             }
         }
 
-        public StreamWrapper(Internal.IStream stream) : this((IStream)stream) 
-        { }
-
         public StreamWrapper(IStream stream)
         {
             if (stream == null)
