@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MediaDevices.Internal
 {
-    [System.Runtime.InteropServices.Guid("A1567595-4C2F-4574-A6FA-ECEF917B9A40")]
+    [Guid("A1567595-4C2F-4574-A6FA-ECEF917B9A40")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IPortableDeviceManager
     {

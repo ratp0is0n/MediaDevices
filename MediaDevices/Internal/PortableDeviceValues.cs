@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace MediaDevices.Internal
 {
-    [ComImport, System.Runtime.InteropServices.Guid("0C15D503-D017-47CE-9016-7B3F978721CC")]
+    [ComImport, Guid("0C15D503-D017-47CE-9016-7B3F978721CC")]
     internal class PortableDeviceValues
     { }
 }

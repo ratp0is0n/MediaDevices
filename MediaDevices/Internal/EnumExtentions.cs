@@ -11,7 +11,7 @@ namespace MediaDevices.Internal
         public static Guid Guid(this Enum e)
         {
             FieldInfo fi = e.GetType().GetField(e.ToString());
-            GuidAttribute attribute = fi.GetCustomAttribute<GuidAttribute>();
+            EnumGuidAttribute attribute = fi.GetCustomAttribute<EnumGuidAttribute>();
             return attribute.Guid;
         }
 
@@ -58,7 +58,7 @@ namespace MediaDevices.Internal
         {
             T en = Enum.GetValues(typeof(T)).Cast<T>().Where(e =>
             {
-                return e.GetType().GetField(e.ToString()).GetCustomAttribute<GuidAttribute>().Guid == guid;
+                return e.GetType().GetField(e.ToString()).GetCustomAttribute<EnumGuidAttribute>().Guid == guid;
             }).FirstOrDefault();
             if (en.Equals(default(T)))
             {

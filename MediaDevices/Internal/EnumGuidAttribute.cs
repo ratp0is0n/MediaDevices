@@ -6,21 +6,20 @@ using System.Threading.Tasks;
 
 namespace MediaDevices
 {
-    internal class GuidAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Field, Inherited = false)]
+    internal class EnumGuidAttribute : Attribute
     {
-        private string v;
-
-        public GuidAttribute()
+        public EnumGuidAttribute()
         {
             this.Guid = Guid.Empty;
         }
 
-        public GuidAttribute(string v)
+        public EnumGuidAttribute(string v)
         {
-            this.v = v;
+            this.Guid = new Guid(v);
         }
 
-        public GuidAttribute(uint a, ushort b, ushort c, byte d, byte e, byte f, byte g, byte h, byte i, byte j, byte k)
+        public EnumGuidAttribute(uint a, ushort b, ushort c, byte d, byte e, byte f, byte g, byte h, byte i, byte j, byte k)
         {
             this.Guid = new Guid(a, b, c, d, e, f, g, h, i, j, k); 
         }

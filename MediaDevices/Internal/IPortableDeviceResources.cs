@@ -4,7 +4,7 @@ using System.Runtime.InteropServices.ComTypes;
 
 namespace MediaDevices.Internal
 {
-    [System.Runtime.InteropServices.Guid("FD8878AC-D841-4D17-891C-E6829CDB6934")]
+    [Guid("FD8878AC-D841-4D17-891C-E6829CDB6934")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IPortableDeviceResources
     {

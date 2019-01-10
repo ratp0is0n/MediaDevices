@@ -82,7 +82,7 @@
     <Compile Include="Internal\EventCallback.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="FunctionalCategory.cs" />
-    <Compile Include="Internal\GuidAttribute.cs" />
+    <Compile Include="Internal\EnumGuidAttribute.cs" />
     <Compile Include="Internal\HResult.cs" />
     <Compile Include="Internal\Item.cs" />
     <Compile Include="Internal\ItemType.cs" />

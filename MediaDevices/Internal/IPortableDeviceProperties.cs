@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace MediaDevices.Internal
 {
-    [System.Runtime.InteropServices.Guid("7F6D695C-03DF-4439-A809-59266BEEE3A6")]
+    [Guid("7F6D695C-03DF-4439-A809-59266BEEE3A6")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IPortableDeviceProperties
     {
