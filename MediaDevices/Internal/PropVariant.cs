@@ -185,16 +185,9 @@ namespace MediaDevices.Internal
 
             int size = (int)this.Value.inner.caub.cElems;
             byte[] managedArray = new byte[size];
-            try
-            {
-                // !!! Does work for x86 and x64 but not for Any CPU !!!
-                Marshal.Copy(this.Value.inner.caub.pElems, managedArray, 0, size);
-            }
-            catch (Exception ex)
-            {
-                Trace.TraceError(ex.ToString());
-                return null;
-            }
+            
+            // bug fixed with manual COM wrapper classes
+            Marshal.Copy(this.Value.inner.caub.pElems, managedArray, 0, size);
             return managedArray;
         }
 

@@ -684,19 +684,8 @@ namespace MediaDevices
 
             // advice event handler
             this.eventCallback = new EventCallback(this);
-            //this.device.Advise(0, this.eventCallback, null, out this.eventCookie);
+            this.device.Advise(0, this.eventCallback, null, out this.eventCookie);
 
-            try
-            {
-                string cookie = String.Empty;
-                IPortableDeviceEventCallback evcb = new EventCallback(this);
-                IPortableDeviceValues dummy = (IPortableDeviceValues)new PortableDeviceValues();
-                this.device.Advise(0, evcb, null, out cookie);
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine(ex.ToString());
-            }
             this.IsConnected = true;
         }
 
