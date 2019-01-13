@@ -17,7 +17,7 @@ namespace MediaDevicesUnitTest
             this.deviceFirmwareVersion = "1.0";
             this.deviceModel = "Fire";
             this.deviceSerialNumber = "G0W0MB06729405K5";
-            this.deviceDeviceType = DeviceType.MediaPlayer;
+            this.deviceDeviceType = DeviceType.Generic;
             this.deviceTransport = DeviceTransport.USB;
             this.devicePowerSource = PowerSource.Battery;
 
@@ -33,6 +33,8 @@ namespace MediaDevicesUnitTest
             // PersistentUniqueId
             this.FolderPersistentUniqueId = "{00000027-0001-0001-0000-000000000000}";
             this.FolderPersistentUniqueIdPath = @"\Interner Speicher\Download";
+            this.FilePersistentUniqueId = "{000001A2-0001-0001-0000-000000000000}";
+            this.FilePersistentUniqueIdPath = @"\Interner Speicher\Download\.DS_Store";
 
             // Writable Tests
             this.workingFolder = @"\Interner Speicher\tmp";
