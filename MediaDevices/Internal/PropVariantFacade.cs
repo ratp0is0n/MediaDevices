@@ -122,6 +122,11 @@ namespace MediaDevices.Internal
                 return 0;
             }
 
+            if (this.Value.vt == PropVariantType.VT_UI4)
+            {
+                 return (ulong)this.Value.uintVal;
+            }
+
             if (this.Value.vt != PropVariantType.VT_UI8)
             {
                 throw new InvalidOperationException($"ToUlong does not work for value type {this.Value.vt}");
